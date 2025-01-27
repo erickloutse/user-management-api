@@ -2,20 +2,25 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+const authRoutes = require("./routes/authRoutes");
+const cors = require("cors");
 
-// Load environment variables from .env file
+// Load environment variables
 dotenv.config();
 
 // Connect to MongoDB
 connectDB();
 
-// Initialize Express app
 const app = express();
 
-// Middleware to parse JSON requests
-app.use(express.json());
+// Middleware
+app.use(cors()); // Enable Cross-Origin Resource Sharing
+app.use(express.json()); // Parse incoming JSON data
 
-// Simple route to test the server
+// Routes
+app.use("/api/auth", authRoutes);
+
+// Default route
 app.get("/", (req, res) => {
   res.send("Welcome to the User Management API!");
 });
