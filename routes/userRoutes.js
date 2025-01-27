@@ -6,12 +6,23 @@ const User = require("../models/User");
 const router = express.Router();
 
 // @route GET /api/users
-// @desc Get all users (Admin only)
+// @desc Get all users with pagination
 // @access Private (Admin)
 router.get("/", protect, admin, async (req, res) => {
+  const page = Number(req.query.pageNumber) || 1;
+  const pageSize = 10; // Number of users per page
+
   try {
-    const users = await User.find({});
-    res.status(200).json(users);
+    const count = await User.countDocuments({});
+    const users = await User.find({})
+      .limit(pageSize)
+      .skip(pageSize * (page - 1));
+
+    res.status(200).json({
+      users,
+      page,
+      pages: Math.ceil(count / pageSize),
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
