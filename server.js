@@ -3,6 +3,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
 
 // Load environment variables
@@ -19,6 +20,8 @@ app.use(express.json()); // Parse incoming JSON data
 
 // Routes
 app.use("/api/auth", authRoutes);
+// Add the user routes
+app.use("/api/users", userRoutes);
 
 // Default route
 app.get("/", (req, res) => {
